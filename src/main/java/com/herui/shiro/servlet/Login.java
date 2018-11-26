@@ -7,6 +7,7 @@ import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
+import org.apache.shiro.web.util.WebUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,6 +17,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+
+import static org.apache.shiro.web.util.WebUtils.redirectToSavedRequest;
 
 @WebServlet("/login")
 public class Login extends HttpServlet {
@@ -49,7 +52,11 @@ public class Login extends HttpServlet {
             req.setAttribute("error", error);
             req.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(req, resp);
         } else {//登录成功
-            req.getRequestDispatcher("/WEB-INF/jsp/home.jsp").forward(req, resp);
+            if(WebUtils.getSavedRequest(req) != null) {
+                redirectToSavedRequest(req, resp, "index");
+            } else {
+                resp.sendRedirect("index");
+            }
         }
     }
 
