@@ -53,7 +53,7 @@ public class Login extends HttpServlet {
             req.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(req, resp);
         } else {//登录成功
             if(WebUtils.getSavedRequest(req) != null) {
-                redirectToSavedRequest(req, resp, "index");
+                WebUtils.redirectToSavedRequest(req, resp, "index");
             } else {
                 resp.sendRedirect("index");
             }
